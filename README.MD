@@ -71,6 +71,44 @@ The API server will start on `http://127.0.0.1:5001`.
 
 ---
 
+## System Architecture
+
+The system architecture for the Movies API Application involves several key components:
+
+1. **Client**: Sends API requests and receives responses.
+2. **Server**: Processes incoming requests, interacts with the database, and handles caching.
+3. **MySQL Database**: Stores user data, movie information, and preferences.
+4. **Redis**: Acts as a caching layer and task queue.
+5. **Workers**: Handle background tasks such as generating movie recommendations.
+
+### Workflow Diagram
+
+![Movies API Workflow](image.png)
+
+### Explanation of Workflow
+1. **Client Request**:
+   - The client sends a `POST` request to the `/preferences` endpoint with user preferences.
+   - The server validates and stores the preferences in the database.
+   
+2. **Recommendation Request**:
+   - A `GET` request is made to `/recommendations` to fetch personalized recommendations.
+   - If a cached response exists, it is returned immediately; otherwise, a task ID is generated.
+
+3. **Task Queue**:
+   - Tasks are enqueued in Redis Queue (`rq`), and workers process the tasks asynchronously.
+
+4. **Fetching Data**:
+   - Workers query the MySQL database to fetch relevant movie data based on the user's preferences.
+
+5. **Caching and Status Update**:
+   - The recommendation results are cached in Redis, and the task status is updated.
+   - Clients can poll the `/recommendations/status` endpoint to check task progress.
+
+6. **Response Delivery**:
+   - Once the recommendations are ready, they are retrieved from the cache and sent back to the client.
+
+---
+
 ## API Endpoints
 
 ### **1. POST `/preferences`**
