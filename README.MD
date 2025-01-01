@@ -38,7 +38,12 @@ git clone <repository_url>
 cd movies_api
 ```
 
-### 2. Set up the MySQL database
+### 2. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Set up the MySQL database
 
 #### Create the database:
 ```sql
@@ -52,14 +57,9 @@ mysql -u root -p movies_api < database/init.sql
 mysql -u root -p movies_api < database/create_tables.sql
 ```
 
-### 3. Insert initial movie data
+### 4. Insert initial movie data
 ```bash
 python insert_movies.py
-```
-
-### 4. Install dependencies
-```bash
-pip install -r requirements.txt
 ```
 
 ### 5. Run the server
